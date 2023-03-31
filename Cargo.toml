@@ -1,7 +1,0 @@
-[package]
-name = "zeton"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-x11-sys = { path = "./x11-sys" }
