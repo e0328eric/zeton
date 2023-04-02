@@ -1,0 +1,9 @@
+[package]
+name = "zeton"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ron = "0.8.0"
+serde = { version = "1.0.159", features = ["derive"] }
+x11 = { path = "./x11" }
