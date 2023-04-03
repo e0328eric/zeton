@@ -11,8 +11,10 @@ pub struct XDisplay {
 
 impl Drop for XDisplay {
     fn drop(&mut self) {
-        unsafe {
-            x11::XCloseDisplay(self.dpy);
+        if !self.dpy.is_null() {
+            unsafe {
+                x11::XCloseDisplay(self.dpy);
+            }
         }
     }
 }
@@ -35,16 +37,6 @@ impl XDisplay {
         }
     }
 
-    #[inline]
-    pub fn into_raw(self) -> *mut x11::Display {
-        self.dpy
-    }
-
-    #[inline]
-    pub unsafe fn from_raw(dpy: *mut x11::Display) -> Self {
-        Self { dpy }
-    }
-
     pub fn check_other_wm(&mut self) {
         unsafe {
             xerror::x_error_xlib.write(Some(xerror::xerror_start));
@@ -57,5 +49,10 @@ impl XDisplay {
             x11::XSetErrorHandler(Some(xerror::xerror));
             x11::XSync(self.dpy, x11::False as i32);
         }
+    }
+
+    #[inline]
+    pub fn get_raw(&self) -> *mut x11::Display {
+        self.dpy
     }
 }
