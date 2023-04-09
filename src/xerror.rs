@@ -7,18 +7,18 @@ pub static mut x_error_xlib: MaybeUninit<x11::XErrorHandler> = MaybeUninit::unin
 #[rustfmt::skip]
 pub unsafe extern "C" fn xerror(dpy: *mut x11::Display, ee: *mut x11::XErrorEvent) -> ffi::c_int {
     if (*ee).error_code as u32 == x11::BadWindow
-    || ((*ee).request_code as u32 == x11::X_SetInputFocus     && (*ee).error_code as u32 == x11::BadWindow)
+    || ((*ee).request_code as u32 == x11::X_SetInputFocus     && (*ee).error_code as u32 == x11::BadMatch)
     || ((*ee).request_code as u32 == x11::X_PolyText8         && (*ee).error_code as u32 == x11::BadDrawable)
     || ((*ee).request_code as u32 == x11::X_PolyFillRectangle && (*ee).error_code as u32 == x11::BadDrawable)
     || ((*ee).request_code as u32 == x11::X_PolySegment       && (*ee).error_code as u32 == x11::BadDrawable)
-    || ((*ee).request_code as u32 == x11::X_ConfigureWindow   && (*ee).error_code as u32 == x11::BadWindow)
+    || ((*ee).request_code as u32 == x11::X_ConfigureWindow   && (*ee).error_code as u32 == x11::BadMatch)
     || ((*ee).request_code as u32 == x11::X_GrabButton        && (*ee).error_code as u32 == x11::BadAccess)
     || ((*ee).request_code as u32 == x11::X_GrabKey           && (*ee).error_code as u32 == x11::BadAccess)
     || ((*ee).request_code as u32 == x11::X_CopyArea          && (*ee).error_code as u32 == x11::BadDrawable)
     {
         return 0;
     }
-    
+
     eprintln!(
         "FATAL ERROR: request code={}, error code={}",
         (*ee).request_code,

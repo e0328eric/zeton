@@ -5,11 +5,11 @@ use std::ptr;
 use crate::xerror;
 
 #[repr(transparent)]
-pub struct XDisplay {
+pub struct Display {
     dpy: *mut x11::Display,
 }
 
-impl Drop for XDisplay {
+impl Drop for Display {
     fn drop(&mut self) {
         if !self.dpy.is_null() {
             unsafe {
@@ -19,7 +19,7 @@ impl Drop for XDisplay {
     }
 }
 
-impl XDisplay {
+impl Display {
     pub fn new(display_name: Option<&str>) -> Option<Self> {
         let dpy = if let Some(name) = display_name {
             let c_str = CString::new(name).ok()?;
@@ -52,7 +52,7 @@ impl XDisplay {
     }
 
     #[inline]
-    pub fn get_raw(&self) -> *mut x11::Display {
+    pub fn get_ptr(&self) -> *mut x11::Display {
         self.dpy
     }
 }
